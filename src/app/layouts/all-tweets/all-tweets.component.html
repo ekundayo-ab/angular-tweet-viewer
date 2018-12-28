@@ -1,0 +1,149 @@
+<section class="hero is-info">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">Tweets from various users</h1>
+      <h2 class="subtitle">The top 30 tweets from three users are as shown below</h2>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column toggle">
+        <div class="is-pulled-right">
+          <span class="has-text-white has-background-dark subtitle">
+            {{(editMode ? 'edit' : 'view') | uppercase}}
+          </span>&nbsp;
+          <a (click)="setPageMode()" class="button is-info">Toggle page mode</a>&nbsp;
+        </div>
+      </div>
+    </div>
+
+    <div class="columns has-background-light">
+      <div class="column has-background-light positions">
+        <div class="control">
+          <div class="label">First order</div>
+          <label class="radio">
+            <input type="radio" name="first" id="">
+            @makeschool
+          </label>
+          <label class="radio">
+            <input type="radio" name="first" id="">
+            @newsycombinator
+          </label>
+          <label class="radio">
+            <input type="radio" name="first" id="">
+            @ycombinator
+          </label>
+        </div>
+
+        <div class="control">
+          <div class="label">Second order</div>
+          <label class="radio">
+            <input type="radio" name="second" id="">
+            @makeschool
+          </label>
+          <label class="radio">
+            <input type="radio" name="second" id="">
+            @newsycombinator
+          </label>
+          <label class="radio">
+            <input type="radio" name="second" id="">
+            @ycombinator
+          </label>
+        </div>
+
+        <div class="control">
+          <div class="label">Third order</div>
+          <label class="radio">
+            <input type="radio" name="third" id="">
+            @makeschool
+          </label>
+          <label class="radio">
+            <input type="radio" name="third" id="">
+            @newsycombinator
+          </label>
+          <label class="radio">
+            <input type="radio" name="third" id="">
+            @ycombinator
+          </label>
+        </div>
+      </div>
+
+      <div class="column is-narrow">
+        <div class="field">
+          <div class="label">Time range from</div>
+          <div class="control">
+            <input class="input" type="date" placeholder="From">
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">Time range to</div>
+          <div class="control">
+            <input class="input" type="date" placeholder="To">
+          </div>
+        </div>
+      </div>
+
+      <div class="column is-narrow">
+        <div class="field">
+          <div class="label">Enter number of tweets to show</div>
+          <div class="control">
+            <input class="input" type="number" placeholder="E.g 1 or 2 ...30 maximum">
+          </div>
+        </div>
+      </div>
+
+      <div class="column is-narrow">
+        <div class="field">
+          <div class="label">Choose Skin</div>
+          <div class="control">
+            <div class="select">
+              <select>
+                <option>Default Skin</option>
+                <option>Contrast Skin</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <div class="columns has-background-dark tweets">
+      <div *ngFor="let screenName of screenNames" class="column is-flex">
+        <div class="tile">
+          <article
+            [ngClass]="{
+              'is-warning': screenName === 'makeschool',
+              'is-primary': screenName === 'newsycombinator',
+              'is-danger': screenName === 'ycombinator'
+            }"
+            class="tile is-child notification">
+            <p class="title is-size-4-mobile is-size-5-tablet is-size-3-desktop">{{screenName}}</p>
+            <p class="subtitle"><a [href]="'https://twitter.com/' + screenName">@{{screenName}}</a></p>
+          </article>
+        </div>
+
+        <div *ngFor="let tweet of tweets" class="card">
+          <div class="card-content">
+            <div class="content">
+              <p>{{tweet.text}}</p>
+              <a [href]="'https://twitter.com/' + tweet.user.screen_name + '/statuses/' + tweet.id_str">See tweet</a> from user <a [href]="'https://twitter.com/' + tweet.user.screen_name">@{{tweet.user.screen_name}}</a>
+              <br>
+              <time class="has-text-weight-bold" datetime="2016-1-1">{{tweet.created_at | date:'medium'}}</time>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>

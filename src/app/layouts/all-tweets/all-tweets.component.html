@@ -20,96 +20,98 @@
       </div>
     </div>
 
-    <div class="columns has-background-light">
-      <div class="column has-background-light positions">
-        <div class="control">
-          <div class="label">First order</div>
-          <label class="radio">
-            <input type="radio" name="first" id="">
-            @makeschool
-          </label>
-          <label class="radio">
-            <input type="radio" name="first" id="">
-            @newsycombinator
-          </label>
-          <label class="radio">
-            <input type="radio" name="first" id="">
-            @ycombinator
-          </label>
-        </div>
-
-        <div class="control">
-          <div class="label">Second order</div>
-          <label class="radio">
-            <input type="radio" name="second" id="">
-            @makeschool
-          </label>
-          <label class="radio">
-            <input type="radio" name="second" id="">
-            @newsycombinator
-          </label>
-          <label class="radio">
-            <input type="radio" name="second" id="">
-            @ycombinator
-          </label>
-        </div>
-
-        <div class="control">
-          <div class="label">Third order</div>
-          <label class="radio">
-            <input type="radio" name="third" id="">
-            @makeschool
-          </label>
-          <label class="radio">
-            <input type="radio" name="third" id="">
-            @newsycombinator
-          </label>
-          <label class="radio">
-            <input type="radio" name="third" id="">
-            @ycombinator
-          </label>
-        </div>
-      </div>
-
-      <div class="column is-narrow">
-        <div class="field">
-          <div class="label">Time range from</div>
+    <form [formGroup]="editForm">
+      <div class="columns has-background-light">
+        <div class="column has-background-light positions">
           <div class="control">
-            <input class="input" type="date" placeholder="From">
+            <div class="label">First order</div>
+            <label class="radio">
+              <input type="radio" formControlName="firstOrder" value="makeschool">
+              @makeschool
+            </label>
+            <label class="radio">
+              <input type="radio" formControlName="firstOrder" value="newsycombinator">
+              @newsycombinator
+            </label>
+            <label class="radio">
+              <input type="radio" formControlName="firstOrder" value="ycombinator">
+              @ycombinator
+            </label>
+          </div>
+
+          <div class="control">
+            <div class="label">Second order</div>
+            <label class="radio">
+              <input type="radio" formControlName="secondOrder" value="makeschool">
+              @makeschool
+            </label>
+            <label class="radio">
+              <input type="radio" formControlName="secondOrder" value="newsycombinator">
+              @newsycombinator
+            </label>
+            <label class="radio">
+              <input type="radio" formControlName="secondOrder" value="ycombinator">
+              @ycombinator
+            </label>
+          </div>
+
+          <div class="control">
+            <div class="label">Third order</div>
+            <label class="radio">
+              <input type="radio" formControlName="thirdOrder" value="makeschool">
+              @makeschool
+            </label>
+            <label class="radio">
+              <input type="radio" formControlName="thirdOrder" value="newsycombinator">
+              @newsycombinator
+            </label>
+            <label class="radio">
+              <input type="radio" formControlName="thirdOrder" value="ycombinator">
+              @ycombinator
+            </label>
           </div>
         </div>
-        <div class="field">
-          <div class="label">Time range to</div>
-          <div class="control">
-            <input class="input" type="date" placeholder="To">
-          </div>
-        </div>
-      </div>
 
-      <div class="column is-narrow">
-        <div class="field">
-          <div class="label">Enter number of tweets to show</div>
-          <div class="control">
-            <input class="input" type="number" placeholder="E.g 1 or 2 ...30 maximum">
+        <div class="column is-narrow">
+          <div class="field">
+            <div class="label">Time range from</div>
+            <div class="control">
+              <input class="input" type="date" formControlName="tweetRangeFrom" placeholder="From">
+            </div>
           </div>
-        </div>
-      </div>
-
-      <div class="column is-narrow">
-        <div class="field">
-          <div class="label">Choose Skin</div>
-          <div class="control">
-            <div class="select">
-              <select>
-                <option>Default Skin</option>
-                <option>Contrast Skin</option>
-              </select>
+          <div class="field">
+            <div class="label">Time range to</div>
+            <div class="control">
+              <input class="input" type="date" formControlName="tweetRangeTo" placeholder="To">
             </div>
           </div>
         </div>
-      </div>
 
-    </div>
+        <div class="column is-narrow">
+          <div class="field">
+            <div class="label">Enter number of tweets to show</div>
+            <div class="control">
+              <input class="input" type="number" formControlName="numberOfTweets" placeholder="E.g 1 or 2 ...30 maximum">
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-narrow">
+          <div class="field">
+            <div class="label">Choose Skin</div>
+            <div class="control">
+              <div class="select">
+                <select formControlName="skinTheme">
+                  <option [ngValue]="'default'">Default Skin</option>
+                  <option [ngValue]="'contrast'">Contrast Skin</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </form>
   </div>
 </section>
 
@@ -131,13 +133,23 @@
           </article>
         </div>
 
-        <div *ngFor="let tweet of tweets" class="card">
+        <div *ngFor="let tweet of tweetsToShow" class="card">
           <div class="card-content">
             <div class="content">
               <p>{{tweet.text}}</p>
               <a [href]="'https://twitter.com/' + tweet.user.screen_name + '/statuses/' + tweet.id_str">See tweet</a> from user <a [href]="'https://twitter.com/' + tweet.user.screen_name">@{{tweet.user.screen_name}}</a>
               <br>
               <time class="has-text-weight-bold" datetime="2016-1-1">{{tweet.created_at | date:'medium'}}</time>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!tweetsToShow.length" class="card">
+          <div class="card-content">
+            <div *ngIf="!tweetsToShow.length">
+              <div class="content">
+                <p> No matching tweets!</p>
+              </div>
             </div>
           </div>
         </div>

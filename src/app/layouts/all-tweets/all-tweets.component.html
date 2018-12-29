@@ -1,4 +1,4 @@
-<section class="hero is-info">
+<section [ngClass]="{'contrast': skinIsContrast}" class="hero is-info">
   <div class="hero-body">
     <div class="container">
       <h1 class="title">Tweets from various users</h1>
@@ -7,7 +7,7 @@
   </div>
 </section>
 
-<section class="section">
+<section [ngClass]="{'contrast': skinIsContrast}" class="section">
   <div class="container">
     <div class="columns">
       <div class="column toggle">
@@ -20,9 +20,9 @@
       </div>
     </div>
 
-    <form [formGroup]="editForm">
+    <form *ngIf="editMode" [formGroup]="editForm">
       <div class="columns has-background-light">
-        <div class="column has-background-light positions">
+        <div class="column positions">
           <div class="control">
             <div class="label">First order</div>
             <label class="radio">
@@ -101,9 +101,9 @@
             <div class="label">Choose Skin</div>
             <div class="control">
               <div class="select">
-                <select formControlName="skinTheme">
-                  <option [ngValue]="'default'">Default Skin</option>
-                  <option [ngValue]="'contrast'">Contrast Skin</option>
+                <select (change)="setSkin($event)" formControlName="skinTheme">
+                  <option value="default">Default Skin</option>
+                  <option value="contrast">Contrast Skin</option>
                 </select>
               </div>
             </div>
@@ -115,10 +115,10 @@
   </div>
 </section>
 
-<section class="section">
+<section [ngClass]="{'contrast': skinIsContrast}" class="section">
   <div class="container">
 
-    <div class="columns has-background-dark tweets">
+    <div class="columns has-background-white-ter tweets">
       <div
         [ngClass]="{
           'first-order': currentOrder.firstOrder === username,

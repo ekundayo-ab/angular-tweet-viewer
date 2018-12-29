@@ -1,15 +1,5 @@
 .tweets .column {
   flex-direction: column;
-
-  // &:nth-of-type(1) {
-  //   order: 1;
-  // }
-  // &:nth-of-type(2) {
-  //   order: 2;
-  // }
-  // &:nth-of-type(3) {
-  //   order: 3;
-  // }
 }
 
 .first-order {
@@ -49,4 +39,53 @@
 }
 .bm--card-equal-height .card-footer {
   margin-top: auto;
+}
+
+$skin-dark: #333333;
+$skin-light: #ffffff;
+
+$skin-border: 1px solid $skin-light;
+
+.contrast {
+  .label,
+  span,
+  p,
+  h1,
+  h2,
+  a,
+  time {
+    color: $skin-light;
+  }
+
+  label.radio {
+    &:hover {
+      color: $skin-light;
+      font-weight: bold;
+    }
+  }
+
+  .button.is-info {
+    color: $skin-light;
+    background: $skin-dark;
+    border: $skin-border;
+
+    &:hover {
+      border: 2px solid $skin-light;
+    }
+  }
+
+  .card, .tile {
+    background-color: $skin-dark;
+  }
+
+  .card { border: $skin-border; }
+
+  .columns {
+    background-color: $skin-dark !important;
+    color: $skin-light !important;
+  }
+
+  &.hero.is-info {
+    background-color: $skin-dark;
+  }
 }

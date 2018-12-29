@@ -13,6 +13,7 @@ export class AllTweetsComponent implements OnInit, OnDestroy {
   tweets = { makeschool: [], newsycombinator: [], ycombinator: [] };
   usernames = Usernames;
   editMode = false;
+  currentSkin = 'default';
 
   tweetFetchSubscription: Subscription;
 
@@ -23,8 +24,8 @@ export class AllTweetsComponent implements OnInit, OnDestroy {
   };
 
   public editForm = new FormGroup({
-    numberOfTweets: new FormControl(3),
-    tweetRangeFrom: new FormControl('2018-12-01'),
+    numberOfTweets: new FormControl(30),
+    tweetRangeFrom: new FormControl('2016-12-01'),
     tweetRangeTo: new FormControl(toHTML5Date()),
     skinTheme: new FormControl('default'),
     firstOrder: new FormControl(this.currentOrder.firstOrder),
@@ -36,13 +37,17 @@ export class AllTweetsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     Usernames.map((username) => {
-      // this.tweetFetchSubscription = this.apiService.fetchTweets(username)
-      //   .subscribe((tweets) => {
-      //     this.tweets[username] = tweets;
-      //   });
+      this.tweetFetchSubscription = this.apiService.fetchTweets(username)
+        .subscribe((tweets) => {
+          this.tweets[username] = tweets;
+        });
 
-      this.tweets[username] = this.apiService.fetchTweets(username);
+      // this.tweets[username] = this.apiService.fetchTweets(username);
     });
+  }
+
+  setPageMode() {
+    this.editMode = !this.editMode;
   }
 
   orderColumn(e) {
@@ -83,10 +88,19 @@ export class AllTweetsComponent implements OnInit, OnDestroy {
     return this.tweets[username];
   }
 
+  setSkin(event) {
+    console.log(event.target.value)
+    this.currentSkin = event.target.value;
+  }
+
   ngOnDestroy() {
     if (this.tweetFetchSubscription) {
       this.tweetFetchSubscription.unsubscribe();
     }
+  }
+
+  get skinIsContrast() {
+    return this.currentSkin === 'contrast';
   }
 
 }

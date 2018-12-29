@@ -89,8 +89,11 @@ export class AllTweetsComponent implements OnInit, OnDestroy {
   }
 
   setSkin(event) {
-    console.log(event.target.value)
     this.currentSkin = event.target.value;
+  }
+
+  get skinIsContrast() {
+    return this.currentSkin === 'contrast';
   }
 
   ngOnDestroy() {
@@ -99,8 +102,5 @@ export class AllTweetsComponent implements OnInit, OnDestroy {
     }
   }
 
-  get skinIsContrast() {
-    return this.currentSkin === 'contrast';
-  }
 
 }

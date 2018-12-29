@@ -119,6 +119,7 @@
   <div class="container">
 
     <div class="columns has-background-white-ter tweets">
+
       <div
         [ngClass]="{
           'first-order': currentOrder.firstOrder === username,
@@ -127,29 +128,13 @@
         }"
         *ngFor="let username of usernames"
         class="column is-flex">
-        <div class="tile">
-          <article
-            [ngClass]="{
-              'is-warning': username === 'makeschool',
-              'is-primary': username === 'newsycombinator',
-              'is-danger': username === 'ycombinator'
-            }"
-            class="tile is-child notification">
-            <p class="title is-size-4-mobile is-size-5-tablet is-size-3-desktop">{{username}}</p>
-            <p class="subtitle"><a [href]="'https://twitter.com/' + username">@{{username}}</a></p>
-          </article>
-        </div>
 
-        <div *ngFor="let tweet of tweetsToShow(username)" class="card bm--card-equal-height">
-          <div class="card-content">
-            <div class="content">
-              <p>{{tweet.text}}</p>
-              <a [href]="'https://twitter.com/' + tweet.user.screen_name + '/statuses/' + tweet.id_str">See tweet</a> from user <a [href]="'https://twitter.com/' + tweet.user.screen_name">@{{tweet.user.screen_name}}</a>
-              <br>
-              <time class="has-text-weight-bold" datetime="2016-1-1">{{tweet.created_at | date:'medium'}}</time>
-            </div>
-          </div>
-        </div>
+        <app-tweets-user [username]="username"></app-tweets-user>
+
+        <app-single-tweet
+          *ngFor="let tweet of tweetsToShow(username)"
+          [tweet]="tweet">
+        </app-single-tweet>
 
         <div *ngIf="!tweetsToShow(username).length" class="card">
           <div class="card-content">

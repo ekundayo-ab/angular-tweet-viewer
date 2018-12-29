@@ -1,0 +1,12 @@
+<div class="tile">
+  <article
+    [ngClass]="{
+      'is-warning': username === 'makeschool',
+      'is-primary': username === 'newsycombinator',
+      'is-danger': username === 'ycombinator'
+    }"
+    class="tile is-child notification">
+    <p class="title is-size-4-mobile is-size-5-tablet is-size-3-desktop">{{username}}</p>
+    <p class="subtitle"><a [href]="'https://twitter.com/' + username">@{{username}}</a></p>
+  </article>
+</div>

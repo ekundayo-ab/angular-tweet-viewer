@@ -101,9 +101,9 @@
             <div class="label">Choose Skin</div>
             <div class="control">
               <div class="select">
-                <select (change)="setSkin($event)" formControlName="skinTheme">
-                  <option value="default">Default Skin</option>
-                  <option value="contrast">Contrast Skin</option>
+                <select formControlName="skinTheme">
+                  <option [value]="'default'">Default Skin</option>
+                  <option [value]="'contrast'">Contrast Skin</option>
                 </select>
               </div>
             </div>

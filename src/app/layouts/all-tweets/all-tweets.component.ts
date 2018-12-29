@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+
 import { ApiService } from '../../services/api.service';
-import { toHTML5Date, Usernames } from '../../definitions';
+import { toHTML5Date, Usernames, DefaultLayoutData } from '../../definitions';
 
 @Component({
   selector: 'app-all-tweets',
@@ -13,8 +14,6 @@ export class AllTweetsComponent implements OnInit, OnDestroy {
   tweets = { makeschool: [], newsycombinator: [], ycombinator: [] };
   usernames = Usernames;
   editMode = false;
-  currentSkin = 'default';
-
   tweetFetchSubscription: Subscription;
 
   public currentOrder = {
@@ -23,17 +22,30 @@ export class AllTweetsComponent implements OnInit, OnDestroy {
     thirdOrder: 'ycombinator'
   };
 
-  public editForm = new FormGroup({
-    numberOfTweets: new FormControl(30),
-    tweetRangeFrom: new FormControl('2016-12-01'),
-    tweetRangeTo: new FormControl(toHTML5Date()),
-    skinTheme: new FormControl('default'),
-    firstOrder: new FormControl(this.currentOrder.firstOrder),
-    secondOrder: new FormControl(this.currentOrder.secondOrder),
-    thirdOrder: new FormControl(this.currentOrder.thirdOrder),
-  });
+  public editForm: FormGroup;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) {
+    let layoutDataToLoad;
+    if (!localStorage.layoutData) {
+      layoutDataToLoad = DefaultLayoutData;
+    } else {
+      layoutDataToLoad = JSON.parse(localStorage.layoutData);
+    }
+
+    Object.keys(this.currentOrder).map((ordering) => {
+      this.currentOrder[ordering] = layoutDataToLoad[ordering];
+    });
+
+    this.editForm = new FormGroup({
+      numberOfTweets: new FormControl(layoutDataToLoad.numberOfTweets),
+      tweetRangeFrom: new FormControl(layoutDataToLoad.tweetRangeFrom),
+      tweetRangeTo: new FormControl(layoutDataToLoad.tweetRangeTo),
+      skinTheme: new FormControl(layoutDataToLoad.skinTheme),
+      firstOrder: new FormControl(layoutDataToLoad.firstOrder),
+      secondOrder: new FormControl(layoutDataToLoad.secondOrder),
+      thirdOrder: new FormControl(layoutDataToLoad.thirdOrder),
+    });
+  }
 
   ngOnInit() {
     Usernames.map((username) => {
@@ -41,8 +53,10 @@ export class AllTweetsComponent implements OnInit, OnDestroy {
         .subscribe((tweets) => {
           this.tweets[username] = tweets;
         });
+    });
 
-      // this.tweets[username] = this.apiService.fetchTweets(username);
+    this.editForm.valueChanges.subscribe((values) => {
+      localStorage.setItem('layoutData', JSON.stringify(values));
     });
   }
 
@@ -51,7 +65,7 @@ export class AllTweetsComponent implements OnInit, OnDestroy {
   }
 
   orderColumn(e) {
-    const orderings = ['firstOrder', 'secondOrder', 'thirdOrder'];
+    const orderings = Object.keys(this.currentOrder);
     const { value, name } = e.target;
 
     orderings.map((order) => {
@@ -76,7 +90,7 @@ export class AllTweetsComponent implements OnInit, OnDestroy {
       tweetRangeTo,
     } = this.editForm.value;
 
-    const tweetsToShow = this.getUserTweets(username).filter((tweet) => {
+    const tweetsToShow = this.tweets[username].filter((tweet) => {
       const tweetDate = toHTML5Date(new Date(tweet.created_at));
       return tweetDate >= tweetRangeFrom && tweetDate <= tweetRangeTo;
     });
@@ -84,16 +98,8 @@ export class AllTweetsComponent implements OnInit, OnDestroy {
     return tweetsToShow.slice(0, numberOfTweets);
   }
 
-  getUserTweets(username) {
-    return this.tweets[username];
-  }
-
-  setSkin(event) {
-    this.currentSkin = event.target.value;
-  }
-
   get skinIsContrast() {
-    return this.currentSkin === 'contrast';
+    return this.editForm.value.skinTheme === 'contrast';
   }
 
   ngOnDestroy() {

@@ -26,15 +26,15 @@
           <div class="control">
             <div class="label">First order</div>
             <label class="radio">
-              <input type="radio" formControlName="firstOrder" value="makeschool">
+              <input type="radio" (change)="orderColumn($event)" name="firstOrder" formControlName="firstOrder" value="makeschool">
               @makeschool
             </label>
             <label class="radio">
-              <input type="radio" formControlName="firstOrder" value="newsycombinator">
+              <input type="radio" (change)="orderColumn($event)" name="firstOrder" formControlName="firstOrder" value="newsycombinator">
               @newsycombinator
             </label>
             <label class="radio">
-              <input type="radio" formControlName="firstOrder" value="ycombinator">
+              <input type="radio" (change)="orderColumn($event)" name="firstOrder" formControlName="firstOrder" value="ycombinator">
               @ycombinator
             </label>
           </div>
@@ -42,15 +42,15 @@
           <div class="control">
             <div class="label">Second order</div>
             <label class="radio">
-              <input type="radio" formControlName="secondOrder" value="makeschool">
+              <input type="radio" (change)="orderColumn($event)" name="secondOrder" formControlName="secondOrder" value="makeschool">
               @makeschool
             </label>
             <label class="radio">
-              <input type="radio" formControlName="secondOrder" value="newsycombinator">
+              <input type="radio" (change)="orderColumn($event)" name="secondOrder" formControlName="secondOrder" value="newsycombinator">
               @newsycombinator
             </label>
             <label class="radio">
-              <input type="radio" formControlName="secondOrder" value="ycombinator">
+              <input type="radio" (change)="orderColumn($event)" name="secondOrder" formControlName="secondOrder" value="ycombinator">
               @ycombinator
             </label>
           </div>
@@ -58,15 +58,15 @@
           <div class="control">
             <div class="label">Third order</div>
             <label class="radio">
-              <input type="radio" formControlName="thirdOrder" value="makeschool">
+              <input type="radio" (change)="orderColumn($event)" name="thirdOrder" formControlName="thirdOrder" value="makeschool">
               @makeschool
             </label>
             <label class="radio">
-              <input type="radio" formControlName="thirdOrder" value="newsycombinator">
+              <input type="radio" (change)="orderColumn($event)" name="thirdOrder" formControlName="thirdOrder" value="newsycombinator">
               @newsycombinator
             </label>
             <label class="radio">
-              <input type="radio" formControlName="thirdOrder" value="ycombinator">
+              <input type="radio" (change)="orderColumn($event)" name="thirdOrder" formControlName="thirdOrder" value="ycombinator">
               @ycombinator
             </label>
           </div>
@@ -119,21 +119,28 @@
   <div class="container">
 
     <div class="columns has-background-dark tweets">
-      <div *ngFor="let screenName of screenNames" class="column is-flex">
+      <div
+        [ngClass]="{
+          'first-order': currentOrder.firstOrder === username,
+          'second-order': currentOrder.secondOrder === username,
+          'third-order': currentOrder.thirdOrder === username
+        }"
+        *ngFor="let username of usernames"
+        class="column is-flex">
         <div class="tile">
           <article
             [ngClass]="{
-              'is-warning': screenName === 'makeschool',
-              'is-primary': screenName === 'newsycombinator',
-              'is-danger': screenName === 'ycombinator'
+              'is-warning': username === 'makeschool',
+              'is-primary': username === 'newsycombinator',
+              'is-danger': username === 'ycombinator'
             }"
             class="tile is-child notification">
-            <p class="title is-size-4-mobile is-size-5-tablet is-size-3-desktop">{{screenName}}</p>
-            <p class="subtitle"><a [href]="'https://twitter.com/' + screenName">@{{screenName}}</a></p>
+            <p class="title is-size-4-mobile is-size-5-tablet is-size-3-desktop">{{username}}</p>
+            <p class="subtitle"><a [href]="'https://twitter.com/' + username">@{{username}}</a></p>
           </article>
         </div>
 
-        <div *ngFor="let tweet of tweetsToShow" class="card">
+        <div *ngFor="let tweet of tweetsToShow(username)" class="card bm--card-equal-height">
           <div class="card-content">
             <div class="content">
               <p>{{tweet.text}}</p>
@@ -144,12 +151,10 @@
           </div>
         </div>
 
-        <div *ngIf="!tweetsToShow.length" class="card">
+        <div *ngIf="!tweetsToShow(username).length" class="card">
           <div class="card-content">
-            <div *ngIf="!tweetsToShow.length">
-              <div class="content">
-                <p> No matching tweets!</p>
-              </div>
+            <div class="content">
+              <p> No matching tweets!</p>
             </div>
           </div>
         </div>

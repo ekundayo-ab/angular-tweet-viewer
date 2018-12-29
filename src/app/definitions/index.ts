@@ -1,2 +1,2 @@
-export * from './constants/screen-names';
+export * from './constants/usernames';
 export * from './functions/dates';

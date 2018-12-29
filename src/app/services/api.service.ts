@@ -11,10 +11,6 @@ export class ApiService {
 
   fetchTweets(screenName) {
     return tweets;
-    return this.http.get(`http://localhost:7890/1.1/statuses/user_timeline.json?count=2&screen_name=${screenName}`)
-      .subscribe((res) => {
-        console.log(res);
-        return res;
-      });
+    return this.http.get(`http://localhost:7890/1.1/statuses/user_timeline.json?count=1&screen_name=${screenName}`);
   }
 }
